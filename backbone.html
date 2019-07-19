@@ -1,0 +1,255 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <title>Resume builder!</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/4.0.0-alpha.5/css/bootstrap.min.css">
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.1.1/jquery.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/underscore.js/1.8.3/underscore-min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/4.0.0-alpha.5/js/bootstrap.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/backbone.js/1.3.3/backbone-min.js"></script>
+
+    <style>
+        .jumbotron {
+            height: 100vh;
+        }
+
+        body {
+            background-color: white !important;
+        }
+
+        .table-bordered th,
+        .table-bordered td {
+            border: 1px solid #ddd!important
+        }
+    </style>
+
+</head>
+
+<body>
+
+    <div class="jumbotron">
+        <div class=container>
+            <h1>Resume builder</h1>
+
+            <table class="table table-bordered">
+                <thead>
+                    <tr>
+                        <th>Degree</th>
+                        <th>Starting date</th>
+                        <th>Ending date</th>
+                        <th>Details</th>
+                    </tr>
+                </thead>
+
+                <tbody id="informations">
+                    <script type="text/template" id="info-row">
+                        <tr>
+                            <td>
+                                <%=title%>
+                            </td>
+                            <td>
+                                <%=start%>
+                            </td>
+                            <td>
+                                <%=end%>
+                            </td>
+                            <td>
+                                <%=details%>
+                            </td>
+                            <td>
+                                <botton class="btn btn-primary" data-action="modify">edit</botton>
+                                <botton class="btn btn-danger" data-action="delete">delete</botton>
+                            </td>
+                            <tr>
+                    </script>
+
+                </tbody>
+            </table>
+
+            <div id="actions">
+                <botton class="btn btn-primary" id="addInformation">Add information</botton>
+            </div>
+
+
+            <script type="text/template" id="info-modify">
+                <div class="modal fade" id="edit-modal" role="dialog">
+                    <div class="modal-dialog">
+                        <div class="modal-content">
+                            <div class="modal-header">
+                                <button type="button" class="close" data-dismiss="modal">&times;</button>
+                                <h4 class="modal-title">INFORMATION</h4>
+                            </div>
+                            <div class="modal-body">
+                                <form role="form">
+                                    <div>
+                                        <div class="radio">
+                                            <label><input type="radio" data-type="education" name="type" <%= (type == "education") ? "checked" : ""%>> Education</label>
+                                        </div>
+
+                                        <div class="radio">
+                                            <label><input type="radio" data-type="experience" name="type" <%= (type == "experience") ? "checked" : ""%>> Experience</label>
+                                        </div>
+                                    </div>
+
+                                    <div class="form-group">
+                                        <label>Title for Degree or experience (e.g. Computer Sci. | Software dev.):</label>
+                                        <input type="text" class="form-control" value="<%=title%>" name="title">
+                                    </div>
+
+                                    <div class="form-group">
+                                        <label>Start date:</label>
+                                        <input type="number" class="form-control" value="<%=start%>" name="start">
+                                    </div>
+
+                                    <div class="form-group">
+                                        <label>End date:</label>
+                                        <input type="number" class="form-control" value="<%=end%>" name="end">
+                                    </div>
+
+                                    <div class="form-group">
+                                        <label>Details:</label>
+                                        <textarea rows="5" class="form-control" name="details"><%=details%></textarea>
+                                    </div>
+
+                                    <button type="submit" class="btn btn-success">Submit</button>
+                                </form>
+                            </div>
+                            <div class="modal-footer">
+                                <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
+                            </div>
+                        </div>
+                    </div>
+            </script>
+
+            </div>
+        </div>
+
+        <div id="modal">
+        </div>
+
+</body>
+
+<script>
+    $(function() {
+        var baseModalView = Backbone.View.extend({
+            el: $("#modal"),
+            className: 'modal fade hide',
+            template: _.template($("#info-modify").html()),
+            events: {
+                'hidden': 'teardown',
+                "click [type='submit']": "notify"
+            },
+            initialize: function() {
+                _.bindAll(this, "show", "teardown", "render", "notify");
+                this.render();
+                this.show();
+            },
+            show: function() {
+                this.$el.modal('show');
+            },
+            teardown: function() {
+                this.$el.data('modal', null);
+                this.remove();
+            },
+            render: function() {
+                this.$el.empty();
+                this.setElement(this.template(this.model.toJSON()));
+            },
+            notify: function() {
+                var self = this;
+                this.model.set({
+                    type: self.$el.find("[type='radio']:checked").data("type"),
+                    start: self.$el.find("[name='start']").val(),
+                    end: self.$el.find("[name='end']").val(),
+                    details: self.$el.find("textarea").text()
+                });
+            }
+        });
+
+        var InformationModel = Backbone.Model.extend({
+            id: -1,
+            defaults: {
+                type: " ",
+                title: " ",
+                start: 2015,
+                end: 2016,
+                details: " "
+            }
+        });
+
+        var InformationView = Backbone.View.extend({
+            events: {
+                "click [data-action='modify']": "modifyInformation",
+                "click [data-action='delete']": "deleteInformation"
+            },
+            template: _.template($("#info-row").html()),
+            initialize: function() {
+                _.bindAll(this, "render", "modifyInformation", "deleteInformation");
+                this.render();
+            },
+            render: function() {
+                this.setElement(this.template(this.model.toJSON()));
+            },
+            modifyInformation: function() {
+                var self = this;
+                modalView = new baseModalView({
+                    model: self.model,
+                    template: _.template($("#info-modify").html())
+                });
+            },
+            deleteInformation: function() {
+                this.model.destroy();
+            }
+        })
+
+        var InformationCollection = Backbone.Collection.extend({
+            url: "../dummy/",
+            model: InformationModel
+        });
+
+        var InformationsView = Backbone.View.extend({
+            el: $("#informations"),
+            initialize: function() {
+                _.bindAll(this, "render", "addInformation");
+                var self = this;
+                this.collection = new InformationCollection();
+
+                this.collection.bind("all", this.render, this);
+
+                this.collection.fetch();
+
+                // I know this is not a Backbone way...
+                $("#addInformation").on("click", function() {
+                    self.addInformation();
+                });
+            },
+            render: function() {
+                this.$el.empty();
+                this.collection.each(function(information) {
+                    var informationView = new InformationView({
+                        model: information
+                    });
+                    this.$el.append(informationView.el);
+                }, this);
+            },
+            addInformation: function() {
+                var self = this;
+                modalView = new baseModalView({
+                    model: new InformationModel()
+                });
+            }
+        });
+
+
+        new InformationsView();
+
+        $("form").submit(function(e) {
+            e.preventDefault();
+            return false;
+        });
+    });
+</script>
+
+</html>
