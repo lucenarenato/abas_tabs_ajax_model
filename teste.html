@@ -1,0 +1,92 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <title>Bootstrap Example</title>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.4.0/css/bootstrap.min.css">
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.4.1/jquery.min.js"></script>
+    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.4.0/js/bootstrap.min.js"></script>
+    <style type="text/css"></style>
+    
+    
+    </style>
+</head>
+
+<body>
+
+        <form class="form-horizontal form-registrar" id="form-registrar">
+                <input type="hidden" value="registrar" name="formulario">
+                   <div class="form-group">
+                      <label for="inputId" class="col-sm-2 control-label">ID</label>
+                      <div class="col-sm-10">
+                         <p class="form-control-static">8888</p>
+                      </div>
+                   </div>
+                   <div class="form-group">
+                      <label for="inputDocumento" class="col-sm-2 control-label">Documento</label>
+                      <div class="col-sm-10">
+                         <input type="text" class="form-control" id="inputDocumento" placeholder="" value="" name="nome">
+                      </div>
+                   </div>
+                   <div class="form-group">
+                      <label class="col-sm-4 control-label" for="pasta">Pasta</label>               
+                      <div class="col-sm-8">
+                         <select id="inputPasta" name="pastas" class="form-control">                 
+                          
+                            <option value="">value</option>                       
+                         </select>
+                      </div>
+                   </div>
+                   <div class="form-group">
+                      <label class="col-sm-4 control-label" for="operacao">Operação</label>
+                      <div class="col-sm-8">
+                      <tr>
+                       
+                         <td>
+                           <div class="checkbox">
+                             <label>
+                                 
+                                 <span class="text">OPERAÇÃO:  PASTA: </span>
+                             </label>
+                           </div>
+                         </td>
+                       
+                      </tr>
+                      </div>
+                   </div>
+                   <div class="input_fields_wrap">
+                           <button class='btn btn-success add_field_button' name="append" id="append"><b>Inserir Operação</b></button>
+                       </div>
+                   <br>                  
+       
+                   <div class="form-group">
+                      <div class="col-sm-offset-2 col-sm-10">
+                      <div class="checkbox">
+                      <label>
+                        <input type="checkbox" value="true" name="possui_validade" id="possui_validade">                      
+                          <span class="text">Validade</span>
+                      </label>
+                       </div>
+                         <div class="checkbox">
+                           <label>
+                             <input type="checkbox" checked="checked" value="true" name="ativo" id="ativo">                      
+                               <span class="text">Ativo</span>
+                           </label>
+                         </div>
+                      </div>
+                   </div>
+                   <div class="form-group">
+                      <hr>
+                   </div>
+                   <div class="form-group">
+                      <div class="col-sm-offset-2 col-sm-10">
+                         <button type="submit" id="salvar_documento" class="btn btn-default">Salvar Edição</button>
+                      </div>
+                   </div>
+                </form>
+
+</body>
+
+</html>

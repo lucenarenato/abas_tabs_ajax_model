@@ -1,0 +1,156 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <title>Bootstrap Example</title>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.4.0/css/bootstrap.min.css">
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.4.1/jquery.min.js"></script>
+    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.4.0/js/bootstrap.min.js"></script>
+</head>
+
+<body>
+
+    <div class="container">
+        <h2>Dynamic Tabs</h2>
+        <ul class="nav nav-tabs">
+            <li class="active"><a data-toggle="tab" href="#home">Documentos</a></li>
+            <li><a data-toggle="tab" href="#menu1">Todos Documentos</a></li>
+        </ul>
+
+        <div class="tab-content">
+            <div id="home" class="tab-pane fade in active">
+                <div class="container-fluid">
+                    <div class="row">
+                        <div class="col-sm-12">
+                            <form class="form-header-documentos">
+                                <div class="panel panel-default">
+                                    <div class="panel-body">
+                                        <div class="row">
+                                            <div class="col-lg-4">
+                                                <p class="small text-muted text-uppercase"><strong>OPERA&Ccedil;&Atilde;O</strong></p>
+                                                <div class="form-group">
+                                                    <select class="form-control" id="inputOperacao" name="documentos-operacoes">
+                                                        <option value="0">Selecionar...</option>
+                                                        <% view.get('tesoes').each(function (vinculo) { %>
+                                                            <option value="<%= vinculo.get('id') %>">
+                                                                <%= vinculo.get('tesao').toString().toUpperCase() %>
+                                                            </option>
+                                                            <% }); %>
+                                                    </select>
+                                                </div>
+                                            </div>
+                                            <div class="col-lg-4">
+                                                <p class="small text-muted text-uppercase"><strong>PASTA</strong></p>
+                                                <select class="form-control" id="inputPasta" name="documentos-pastas">
+                                                    <option value="0">Selecionar...</option>
+                                                    <% this.model.get("pastas").each(function (pasta) { %>
+                                                        <option value="<%= pasta.get(" id ") %>">
+                                                            <%= pasta.get("titulo") %>
+                                                        </option>
+                                                        <% }); %>
+                                                </select>
+                                            </div>
+                                            <div class="col-lg-4">
+                                                <p class="small text-muted text-uppercase"><strong><%= view.get("nome_contexto") %></strong></p>
+                                                <a href="#!<%= adagio.environment.getTenancy('cartorial/documentos/create') %>" class="btn btn-primary btn-block btn-md">CRIAR NOVO</a>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <table class="table">
+                                        <thead>
+                                            <tr>
+                                                <th>ID</th>
+                                                <th>Documento</th>
+                                                <!--<th>Opera&ccedil;&atilde;o</th>-->
+                                                <%(this.contexto_id != 2 ? '<th>  Operação </th>': null)%>
+                                                    <th>Validade</th>
+                                                    <th></th>
+                                            </tr>
+                                        </thead>
+                                        <tbody id="documentos_tabela"></tbody>
+                                    </table>
+                                </div>
+                            </form>
+                        </div>
+                        <!-- /.col-md-12 -->
+                    </div>
+                    <!-- /.row -->
+                    <div class="row">
+                        <div class="col-md-12">
+
+                        </div>
+                    </div>
+                </div>
+                <!-- /.container-fluid -->
+            </div>
+            <div id="menu1" class="tab-pane fade">
+                <h3>Todos</h3>
+                <div class="container-fluid">
+                    <div class="row">
+                        <div class="col-sm-12">
+                            <form class="form-header-documentos">
+                                <div class="panel panel-default">
+                                    <div class="panel-body">
+                                        <div class="row">
+
+                                            <div class="col-lg-4">
+                                                <a href="#!<%= adagio.environment.getTenancy('cartorial/documentos/create') %>" class="btn btn-info btn-sm">CRIAR NOVO</a>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <table class="table">
+                                        <thead>
+                                            <tr>
+                                                <th>ID</th>
+                                                <th>Documento</th>
+                                                <th>Ativo</th>
+                                                <th></th>
+                                            </tr>
+                                        </thead>
+                                        <tbody>
+
+                                            <% view.get("tipos_todos").each(function (tipos) { %>
+                                                <tr role="row" class="">
+                                                    <td>
+                                                        <%= tipos.get("id") %>
+                                                    </td>
+                                                    <td>
+                                                        <%= tipos.get("nome") %>
+                                                    </td>
+                                                    <td>
+                                                        <%= tipos.get("ativo") %>
+                                                    </td>
+                                                    <td></td>
+                                                    <td>
+                                                        <span class="pull-right">
+                    <!--<button title="Editar cadastro" type="button" class="btn btn-xs btn-default editar_dados" value="" data-contexto=""><i class="fa fa-fw fa-pencil-square-o"></i></button>-->
+                    <a data-tipos-id="<%= tipos.get("id")%>" href="#!" id="adicionar" class="btn btn-xs btn-info"><i class="glyphicon glyphicon-plus" aria-hidden="true"></i></a>                                                                 
+                  </span>
+                                                    </td>
+                                                </tr>
+                                                <% }, view); %>
+                                        </tbody>
+                                    </table>
+                                </div>
+                            </form>
+                        </div>
+                        <!-- /.col-md-12 -->
+                    </div>
+                    <!-- /.row -->
+                    <div class="row">
+                        <div class="col-md-12">
+
+                        </div>
+                    </div>
+                </div>
+                <!-- /.container-fluid -->
+            </div>
+
+        </div>
+    </div>
+
+</body>
+
+</html>

@@ -1,0 +1,77 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <title>Bootstrap Example</title>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.4.0/css/bootstrap.min.css">
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.4.1/jquery.min.js"></script>
+    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.4.0/js/bootstrap.min.js"></script>
+</head>
+
+<body>
+
+        <script>
+                var id;
+                $('.excluirReg').click(function () {
+                    id = $(this).attr('id');
+                    $('.deleteID').val(id)
+                    $("#myModal").modal('show');
+                });
+        
+                $('.delete-confirm').click(function () {
+                    if (id != '') {
+                        $.ajax({
+                            url: '/Usuario/DeletarUsuario',
+                            data: { 'id': id },
+                            method: "get",
+                            sucess: function (data) {
+                                if (data) {
+                                    if ($('.modal-header').hasClass('alert-danger')) {
+                                        $('.modal-header').removeClass('alert-danger').addClass('alert-sucess');
+                                        $('.delete-confirm').css('display', 'none');
+                                    }
+                                    $('.sucess-message').html('Registro excluido com sucesso');
+                                }
+                            }, erro: function (err) {
+                                if (!$('.modal-header').hasClass('alert-danger')) {
+                                    $('.modal-header').removeClass('alert-sucess').addClass('alert-danger');
+                                    $('.delete-confirm').css('display', 'none');
+                                }
+                                $('.sucess-message').html(err.statusText);
+                            }
+                        });
+                    }
+                });
+        
+                $("#myModal").on("hidden.bs.modal", function () {
+                    $(".modal-header").removeClass(' ').addClass('alert-danger');
+                    $('.delete-confirm').css('display', 'inline-block');
+                    $('.sucess-message').html('').html('Tem certeza que de deseja excluir esse registro?');
+                });
+            </script>
+            
+        
+        <div class="modal fade" id="myModal" role="dialog">
+            <div class="modal-dialog" role="document"></div>
+            <div class="modal-dialog">
+                <div class="modal-content">
+                    <div class="modal-header">
+                        <button type="button" class="close" data-dissmiss="modal" aria-hidden="true">&times;</button>
+                        <h4 class="modal-title" id="myModalLabel">Confirmar</h4>
+                    </div>
+                    <div class="modal-body">
+                        <p class="sucess-message">Tem certeza de que quer excluir o registro?</p>
+                    </div>
+                    <div class="modal-footer">
+                        <button class="btn btn-success delete-confirm" type="button">Sim</button>
+                        <button class="btn btn-default" type="button" data-dissmiss="modal">Não</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+</body>
+
+</html>

@@ -1,0 +1,138 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <title>
+    Criando Abas
+  </title>
+  <meta charset="UTF-8" />
+  <script type="text/javascript" src="http://code.jquery.com/jquery-1.7.2.min.js"></script>
+
+<style type="text/css">
+.tabs {
+  position: relative;   
+  min-height: 1080px; /* This part sucks */
+  clear: both;
+  margin: 25px 0;
+}
+.tab {
+  float: left;
+}
+.tab label {
+  background: #eee; 
+  padding: 10px; 
+  border: 1px solid #ccc; 
+  margin-left: -1px; 
+  position: relative;
+  left: 1px; 
+  border-top-right-radius: 8px;
+    border-top-left-radius: 8px;
+}
+.tab [type=radio] {
+  display: none;   
+}
+.content {
+  position: absolute;
+  top: 28px;
+  left: 0;
+  background: white;
+  right: 0;
+  bottom: 0;
+  padding: 20px;
+  border: 1px solid #ccc; 
+}
+[type=radio]:checked ~ label {
+  background: white;
+  border-bottom: 1px solid white;
+  z-index: 2;
+}
+[type=radio]:checked ~ label ~ .content {
+  z-index: 1;
+}
+
+    
+  </style>
+ 
+</head>
+<body>
+    <div class="container-fluid">
+            <div class="tabs">
+    
+                    <div class="tab">
+                        <input type="radio" id="tab-1" name="tab-group-1" checked>
+                        <label for="tab-1">Documentos</label>
+                        
+                        <div class="content">
+                                <div class="container-fluid">
+                                        <div class="row">
+                                          <div class="col-sm-12">
+                                    <form class="form-header-documentos">
+                                    <div class="panel panel-default">
+                                      <div class="panel-body">
+                                        <div class="row">
+                                          <div class="col-lg-4">
+                                          <p class="small text-muted text-uppercase"><strong>OPERA&Ccedil;&Atilde;O</strong></p>
+                                          <div class="form-group">
+                                            <select class="form-control" id="inputOperacao" name="documentos-operacoes">
+                                              <option value="0">Selecionar...</option>
+                                              <% view.get('tesoes').each(function (vinculo) { %>
+                                                <option value="<%= vinculo.get('id') %>"><%= vinculo.get('tesao').toString().toUpperCase() %></option>
+                                              <% }); %>
+                                            </select>
+                                          </div>
+                                          </div>
+                                          <div class="col-lg-4">
+                                            <p class="small text-muted text-uppercase"><strong>PASTA</strong></p>
+                                            <select class="form-control" id="inputPasta" name="documentos-pastas">
+                                            <option value="0">Selecionar...</option>
+                                            <% this.model.get("pastas").each(function (pasta) { %>
+                                            <option value="<%= pasta.get("id") %>"><%= pasta.get("titulo") %></option>
+                                            <% }); %>
+                                            </select>
+                                          </div>
+                                          <div class="col-lg-4">
+                                            <p class="small text-muted text-uppercase"><strong><%= view.get("nome_contexto") %></strong></p>
+                                            <a href="#!<%= adagio.environment.getTenancy('cartorial/documentos/create') %>" class="btn btn-inverse btn-block btn-md">CRIAR NOVO</a>
+                                          </div>
+                                        </div>
+                                      </div>
+                                      <table class="table">
+                                        <thead>
+                                          <tr>
+                                            <th>ID</th><th>Documento</th>
+                                            <!--<th>Opera&ccedil;&atilde;o</th>-->
+                                            <%(this.contexto_id != 2 ? '<th>  Operação </th>': null)%>
+                                            <th>Validade</th><th></th>
+                                          </tr>
+                                        </thead>
+                                        <tbody id="documentos_tabela"></tbody>
+                                      </table>
+                                    </div>
+                                    </form>
+                                          </div><!-- /.col-md-12 -->
+                                        </div><!-- /.row -->
+                                        <div class="row">
+                                          <div class="col-md-12">
+                                    
+                                          </div>
+                                        </div>
+                                      </div><!-- /.container-fluid -->
+                        </div> 
+                    </div>
+                     
+                    <div class="tab">
+                        <input type="radio" id="tab-2" name="tab-group-1">
+                        <label for="tab-2">Todos Documentos</label>
+                        
+                        <div class="content">
+                            stuff2
+                        </div> 
+                    </div>
+                     
+                     
+                     
+                 </div>
+  
+    </div><!-- /.container-fluid -->
+    
+</body>
+</html>
